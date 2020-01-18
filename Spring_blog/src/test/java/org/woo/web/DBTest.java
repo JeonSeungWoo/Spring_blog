@@ -12,16 +12,16 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration(locations = { "file:src/main/webapp/WEB-INF/spring/root-context.xml" })
 public class DBTest {
 	
-	@Test
-	public void OrcleDBConnectionTest() throws Exception {
-	Class.forName("oracle.jdbc.driver.OracleDriver");
-	Connection con = DriverManager.getConnection(
-	"jdbc:oracle:thin:@192.168.0.33:1521:orcl",
-	"orcl",
-	"1234");
-	System.out.println(con);
-	con.close();
-	}
+//	@Test
+//	public void OrcleDBConnectionTest() throws Exception {
+//	Class.forName("oracle.jdbc.driver.OracleDriver");
+//	Connection con = DriverManager.getConnection(
+//	"jdbc:oracle:thin:@192.168.0.33:1521:orcl",
+//	"orcl",
+//	"1234");
+//	System.out.println(con);
+//	con.close();
+//	}
 
 	@Test
 	public void postgresDBConnectionTest() throws Exception {
@@ -34,17 +34,17 @@ public class DBTest {
 	con.close();
 	}
 	
-	@Test
-	public void MysqlDBConnectionTest() throws Exception {
-    //mysql driver name 5version
-	//com.mysql.jdbc.Driver
-	//8버전 부터 driver name이 변경 되었고 Timezone을 설정하도록 변경 되었다.
-	Class.forName("com.mysql.cj.jdbc.Driver");
-	Connection con = DriverManager.getConnection(
-	"jdbc:mysql://localhost:3306/blog?useSSL=false&serverTimezone=Asia/Seoul",
-	"blog",
-	"1234");
-	System.out.println(con);
-	con.close();
-	}
+//	@Test
+//	public void MysqlDBConnectionTest() throws Exception {
+//    //mysql driver name 5version
+//	//com.mysql.jdbc.Driver
+//	//8버전 부터 driver name이 변경 되었고 Timezone을 설정하도록 변경 되었다.
+//	Class.forName("com.mysql.cj.jdbc.Driver");
+//	Connection con = DriverManager.getConnection(
+//	"jdbc:mysql://localhost:3306/blog?useSSL=false&serverTimezone=Asia/Seoul",
+//	"blog",
+//	"1234");
+//	System.out.println(con);
+//	con.close();
+//	}
 }
