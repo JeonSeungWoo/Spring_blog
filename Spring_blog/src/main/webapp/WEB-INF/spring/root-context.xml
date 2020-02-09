@@ -49,5 +49,4 @@
     </bean>
 
 <context:component-scan base-package="org.woo.web" />
-	
 </beans>
