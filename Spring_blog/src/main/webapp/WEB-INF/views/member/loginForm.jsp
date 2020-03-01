@@ -55,11 +55,9 @@
     border-radius: 10px;
     margin-bottom: 5px;
     color: white;
-    }
-    
-    #loginBtn{
     background: black;
     }
+    
     
     
   
@@ -88,12 +86,20 @@
        
        <div class="buttonDiv">
          <button type="submit" class="btn1" id="loginBtn">로그인</button>
+         <button type="button" class="btn1" id="signUpBtn">회원가입</button>
        </div>
        
   </div>
 </form>  
 </body>
+<script src="/resources/js/jquery.min.js"></script>
 <script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function(){
+	//회원가입 페이지로.
+	 document.getElementById('signUpBtn').onclick = function() { 
+		location.href = "/member/mainSignUpForm";
+	 }
+});
 
 
 

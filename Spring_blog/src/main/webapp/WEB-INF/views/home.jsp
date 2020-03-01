@@ -9,6 +9,10 @@
 <h1>Hello </h1>
 <a href="/member/loginForm">로그인 페이지</a>
 
+<input type="text" id="test">
+<button type="button" id="btn">btn</button>
+
 <P>  The time on the server is ${serverTime}. </P>
+
 </body>
 </html>

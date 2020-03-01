@@ -8,5 +8,20 @@
 		and pw = #{pw}
 		and interlock_type = 'main'
 	</select>
-
+   <insert id="mainSignUp" parameterType="MemberVO">
+        insert into
+        tbl_member(key,nickname,pw,name,email,phoneNumber,birthday,
+        gender,auth,interlock_type,regdate,authdate)
+        values
+        (#{key},#{nickname},#{pw},#{name},#{email},#{phoneNumber},#{birthday},
+        #{gender},#{auth},'main',now(),now())
+   </insert>
+   
+   <select id="checkKey" resultType="java.lang.Integer">
+       select count(*) from tbl_member where key = #{key}
+   </select>
+   
+   <select id="checkNickname" resultType="java.lang.Integer">
+       select count(*) from tbl_member where nickname = #{nickname}
+   </select>
 </mapper> 

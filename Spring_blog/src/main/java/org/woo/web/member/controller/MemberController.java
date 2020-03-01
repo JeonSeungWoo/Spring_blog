@@ -1,11 +1,17 @@
 package org.woo.web.member.controller;
 
+import java.io.PrintWriter;
+
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.woo.web.member.domain.MemberVO;
 import org.woo.web.member.service.MemberService;
 
@@ -16,49 +22,96 @@ public class MemberController {
 	@Inject
 	private MemberService service;
 
-	// 로그인 폼을 띄우는 부분
+	// 濡쒓렇???쇱쓣 ?꾩슦??遺遺?
 	@RequestMapping(value = "/loginForm", method = RequestMethod.GET)
 	public String loginForm() {
-		return "member/loginForm"; // /login/loginForm.jsp를 띄움.
+		return "member/loginForm"; // /login/loginForm.jsp瑜??꾩?.
 	}// end of loginForm
 
-	// 로그인 처리하는 부분
+	// 濡쒓렇??泥섎━?섎뒗 遺遺?
 	@RequestMapping(value = "/loginProcess", method = RequestMethod.POST)
 	public String loginProcess(HttpSession session, MemberVO dto) throws Exception {
 		String returnURL = "";
 		if (session.getAttribute("login") != null) {
-			// 기존에 login이란 세션 값이 존재한다면
-			session.removeAttribute("login"); // 기존값을 제거해 준다.
+			// 湲곗〈??login?대? ?몄뀡 媛믪씠 議댁옱?쒕떎硫?湲곗〈媛믪쓣 ?쒓굅??以??
+			session.removeAttribute("login");
 		}
 
-		// 로그인이 성공하면 MemberVO 객체를 반환함.
+		// 濡쒓렇?몄씠 ?깃났?섎㈃ MemberVO 媛앹껜瑜?諛섑솚?쒕떎.
 		MemberVO vo = service.login(dto);
 		System.out.println(vo);
-		if (vo != null) { // 로그인 성공
-			session.setAttribute("login", vo); // 세션에 login인이란 이름으로 MemberVO 객체를 저장해 놈.
-			returnURL = "redirect:/member/success"; // 로그인 성공시 게시글 목록페이지로 바로 이동하도록 하고
-		} else { // 로그인에 실패한 경우
-			returnURL = "redirect:/member/loginForm"; // 로그인 폼으로 다시 가도록 함
+		// 濡쒓렇???깃났
+		if (vo != null) {
+			// ?몄뀡??login?몄씠? ?대쫫?쇰줈 MemberVO 媛앹껜瑜???ν빐 ?볥뒗??
+			session.setAttribute("login", vo);
+			// 濡쒓렇???깃났???대룞
+			returnURL = "redirect:/member/success";
+		} else {
+			// 濡쒓렇?몄뿉 ?ㅽ뙣??寃쎌슦 ?대룞
+			returnURL = "redirect:/member/loginForm";
 		}
-		return returnURL; // 위에서 설정한 returnURL 을 반환해서 이동시킴
+		return returnURL; // ?꾩뿉???ㅼ젙??returnURL ??諛섑솚?댁꽌 ?대룞?쒗궡
 	}
 
-	// 로그아웃 하는 부분
+	// 濡쒓렇?꾩썐 ?섎뒗 遺遺?
 	@RequestMapping(value = "/logout")
 	public String logout(HttpSession session) {
-		session.invalidate(); // 세션 전체를 날려버림
-		// session.removeAttribute("login"); // 하나씩 하려면 이렇게 해도 됨.
-		return "redirect:/member/loginForm"; // 로그아웃 후 게시글 목록으로 이동하도록...함
-
+		session.invalidate(); // ?몄뀡 ?꾩껜瑜??좊젮踰꾨┝
+		// session.removeAttribute("login"); // ?섎굹???섎젮硫??대젃寃??대룄 ??
+		return "redirect:/member/loginForm"; // 濡쒓렇?꾩썐 ??寃뚯떆湲 紐⑸줉?쇰줈 ?대룞?섎룄濡??쒕떎.
 	}
-	
+
 	@RequestMapping(value = "/success")
 	public String success(HttpSession session) {
-		
-		return "member/success"; // 로그아웃 후 게시글 목록으로 이동하도록...함
-
+		return "member/success"; // 濡쒓렇?꾩썐 ??寃뚯떆湲 紐⑸줉?쇰줈 ?대룞?섎룄濡?..??
 	}
-	
-	
+
+	// ?뚯썝媛????
+	@RequestMapping(value = "/mainSignUpForm", method = RequestMethod.GET)
+	public String mainSignUpForm() throws Exception {
+		
+		return "/member/mainSignUpForm";
+	}
+
+	// ?뚯썝媛??湲곕뒫
+	@RequestMapping(value = "/mainSignUp", method = RequestMethod.POST)
+	public String mainSignUp(Model model, MemberVO vo) throws Exception {
+		service.mainSignUp(vo);
+		return "redirect:/member/loginForm";
+	}
+
+	@RequestMapping(value = "/checkKey", method = RequestMethod.POST)
+	public void checkKey(HttpServletRequest req, HttpServletResponse res, Model model) throws Exception {
+		PrintWriter out = res.getWriter();
+
+		try {
+			String parmid = (req.getParameter("key") == null) ? "" : String.valueOf(req.getParameter("key"));
+
+			System.out.println(req.getParameter("key"));
+			MemberVO vo = new MemberVO();
+			vo.setKey(parmid.trim());
+			Integer checkPoint = service.checkId(vo);
+
+			System.out.println(checkPoint);
+			out.print(checkPoint);
+			out.flush();
+			out.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			out.print("1");
+
+		}
+	}
+
+	@RequestMapping(value = "/checkNickName", method = RequestMethod.POST)
+	public Integer checkNickName(HttpServletRequest req, HttpServletResponse res, Model model) throws Exception {
+		String parmid = (req.getParameter("nickName") == null) ? "" : String.valueOf(req.getParameter("nickName"));
+		MemberVO vo = new MemberVO();
+		vo.setNickname(parmid.trim());
+		Integer checkPoint = service.checkId(vo);
+
+		return checkPoint;
+	}
 
 }
